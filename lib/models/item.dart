@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Item {
   final String? id;
   final String name;
@@ -18,7 +20,8 @@ class Item {
       'name': name,
       'quantity': quantity,
       'price': price,
-      'createdAt': createdAt,
+      'createdAt':
+          Timestamp.fromDate(createdAt), // Convert DateTime to Timestamp
     };
   }
 
@@ -28,7 +31,8 @@ class Item {
       name: map['name'] ?? '',
       quantity: map['quantity'] ?? 0,
       price: (map['price'] ?? 0).toDouble(),
-      createdAt: (map['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      createdAt: (map['createdAt'] as Timestamp?)?.toDate() ??
+          DateTime.now(), // Fixed: Cast to Timestamp first
     );
   }
 
