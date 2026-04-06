@@ -25,7 +25,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: StreamBuilder<List<Item>>(
         stream: _service.streamItems(),
         builder: (context, snapshot) {
-          // Loading state
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
               child: Column(
@@ -39,7 +38,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          // Error state
           if (snapshot.hasError) {
             return Center(
               child: Column(
@@ -50,8 +48,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text('Error: ${snapshot.error}'),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: () => setState(
-                        () {}), // Now setState works because it's StatefulWidget
+                    onPressed: () {
+                      setState(() {});
+                    },
                     child: const Text('Retry'),
                   ),
                 ],
@@ -61,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
           final items = snapshot.data ?? [];
 
-          // Empty state
           if (items.isEmpty) {
             return Center(
               child: Column(
@@ -85,7 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
             );
           }
 
-          // Data state - show inventory
           return ListView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: items.length,
@@ -115,7 +112,6 @@ class _HomeScreenState extends State<HomeScreen> {
     );
 
     if (result == true && mounted) {
-      // Use mounted instead of context.mounted for older Flutter versions
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Inventory updated successfully!')),
       );
@@ -145,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> {
     if (confirm == true) {
       await _service.deleteItem(id);
       if (mounted) {
-        // Check mounted before using context
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Item deleted successfully')),
         );
